@@ -1,0 +1,42 @@
+{
+  "stationId": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "hardwareVersion": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "firmwareVersion": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "signalStrength": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "networkOperator": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "latitude": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "longitude": {
+    "presence": {
+      "allowEmpty": false
+    }
+  },
+  "altitude": {
+    "presence": {
+      "allowEmpty": false
+    }
+  }
+}

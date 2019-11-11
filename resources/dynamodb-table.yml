@@ -1,0 +1,102 @@
+Resources:
+  StationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.STATION_TABLE}
+      AttributeDefinitions:
+        - AttributeName: stationId
+          AttributeType: N
+      KeySchema:
+        - AttributeName: stationId
+          KeyType: HASH
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
+  PlotTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.PLOT_TABLE}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: title
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: title
+          KeyType: RANGE
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.USER_TABLE}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
+  VarietyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.VARIETY_TABLE}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: name
+          KeyType: RANGE
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
+  ChildTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.CHILD_TABLE}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: fullName
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+        - AttributeName: fullName
+          KeyType: RANGE
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
+  AgeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.AGE_TABLE}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}

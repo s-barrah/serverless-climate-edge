@@ -1,0 +1,68 @@
+{
+  "stationId": 996937517,
+  "hardwareVersion": "2.0-CG",
+  "firmwareVersion": "3.1",
+  "signalStrength": 26,
+  "networkOperator": "63907",
+  "latitude": 0.0883,
+  "longitude": 35.20965,
+  "altitude": 169.09,
+  "data": [
+    {
+      "timestamp": "2018-12-01T15:01:06Z",
+      "airTemperature": 24.82,
+      "soilTemperature": 21.44,
+      "airPressure": 825,
+      "soilMoisture": 1741,
+      "leafWetness": 1630,
+      "PAR": 1775,
+      "humidity": 59.01,
+      "batteryVoltage": 7890,
+      "batteryTemperature": 24.58,
+      "solarVoltage": 21229,
+      "chargeCurrent": 5
+    },
+    {
+      "timestamp": "2018-12-01T14:01:06Z",
+      "airTemperature": 22.86,
+      "soilTemperature": 20.75,
+      "airPressure": 794,
+      "soilMoisture": 1639,
+      "leafWetness": 1672,
+      "PAR": 1733,
+      "humidity": 52.12,
+      "batteryVoltage": 8214,
+      "batteryTemperature": 22.11,
+      "solarVoltage": 20118,
+      "chargeCurrent": 6
+    },
+    {
+      "timestamp": "2018-12-01T16:01:06Z",
+      "airTemperature": 25.76,
+      "soilTemperature": 21.52,
+      "airPressure": 844,
+      "soilMoisture": 1820,
+      "leafWetness": 1711,
+      "PAR": 1866,
+      "humidity": 60.12,
+      "batteryVoltage": 7912,
+      "batteryTemperature": 25.24,
+      "solarVoltage": 22480,
+      "chargeCurrent": 4
+    },
+    {
+      "timestamp": "2018-12-01T14:09:45Z",
+      "airTemperature": 22.98,
+      "soilTemperature": 21.20,
+      "airPressure": 801,
+      "soilMoisture": 1662,
+      "leafWetness": 1599,
+      "PAR": 1768,
+      "humidity": 55.42,
+      "batteryVoltage": 8182,
+      "batteryTemperature": 23.89,
+      "solarVoltage": 21244,
+      "chargeCurrent": 6
+    }
+  ]
+}

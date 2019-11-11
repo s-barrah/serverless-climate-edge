@@ -1,0 +1,14 @@
+# package directories
+node_modules
+env.json
+jspm_packages
+dist
+.idea
+yarn-error.log
+package-lock.json
+coverage
+# Serverless directories
+.serverless
+.dynamodb
+.webpack
+.DS_Store

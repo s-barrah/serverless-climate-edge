@@ -1,0 +1,7 @@
+{
+  "stationId": {
+    "presence": {
+      "allowEmpty": false
+    }
+  }
+}

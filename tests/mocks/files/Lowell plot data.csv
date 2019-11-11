@@ -1,0 +1,31 @@
+Farmer Name,Plot Name,Location,Coffee Variety,Plant Number - Total,Number of Plants,Farm Size,Size Units,Age,Age Units,Soil Testing,Last Soil Test
+John Smith 1,El Esfuerzo,Aguanqueterique,Catuai,,,,,4,Years,Yes,2015
+John Smith 1,El Esfuerzo,Aguanqueterique,Catuai,,,,,5,Years,Yes,2015
+John Smith 3,Las Glorias,Aldoberros,Borbon,,,,,3,Years,,
+John Smith 4,El Pedregal,Jarasquin,Catuai,4000,,,,4,Years,,
+John Smith 4,El Pedregal,Jarasquin,Catuai,4000,,,,6,Years,,
+John Smith 4,El Pedregal,Jarasquin,Catuai,4000,,,,8,Years,,
+John Smith 4,El Pedregal,Jarasquin,Borbon,4000,,,,,,,
+John Smith 5,El Refugio,Los Patios,Catuai,,,,,12,Years,Yes,2013
+John Smith 6,Plot 1,El Guachipilin,Catuai,3500,,,,7,Years,Yes,2016
+John Smith 6,Plot 1,El Guachipilin,Catuai,3500,,,,9,Years,Yes,2016
+John Smith 6,Plot 1,El Guachipilin,Catuai,3500,,,,12,Years,Yes,2016
+John Smith 7,La Vertiente,Aguanqueterique,Catuai,,,1,Manzana,10,Years,Yes,2008
+John Smith 9,El Ocote,Aguanqueterique,Catuai,1600,,,,5,Years,Yes,2016
+John Smith 8,Adoberros,Las Tijeras,Catuai,2000,,,,4,Years,Yes,2016
+John Smith 8,Los Manueles,Cascrío,,,,,,,,,
+John Smith 10,El Guachipilin,Carrizal,Catuai,,6000,,,,,,
+John Smith 10,El Guachipilin,Carrizal,Catuai,,2500,,,8,months,,
+John Smith 11,El Tucán,Casas Quemadas,Catuai,,,1,Manzana,18,Years,Yes,2018
+John Smith 11,El Sucunan,,,,,0.5,Manzana,10,Years,,
+John Smith 12,El Olivo,Aguanqueterique,Catuai,3000,,,,4,Years,,
+John Smith 13,El Río,Los Patios,Catuai,,,1.5,Manzana,,,No,
+John Smith 13,El Devisadero,El Potrero,Borbon,,,,,,,,
+John Smith 13,El Devisadero,El Potrero,Catimore,,,,,,,,
+John Smith 13,El Devisadero,El Potrero,Lempira,,,,,,,,
+John Smith 14,El Naranjo,Los Patios,Catuai,,,,,6,Years,Yes,2018
+John Smith 14,El Naranjo,Los Patios,Borbon,,,,,10,Years,Yes,2018
+John Smith 15,Plot 1,El Guachipilin,Catuai,3500,,,,,,Yes,2016
+John Smith 16,Plot 1,,,,,,,,,,
+John Smith 17,El Roble,Aguanqueterique,Catuai,,,,,,,Yes,2016
+John Smith 18,Santa María,Aldoberros,Catuai,3000,,,,,,Yes,2017
