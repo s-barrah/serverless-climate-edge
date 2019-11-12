@@ -1,4 +1,5 @@
 import { Model } from '../Wrapper';
+import UUID from "uuid/v4";
 
 /***
  * AgeModel
@@ -11,8 +12,34 @@ export default class AgeModel extends Model {
   constructor() {
     super();
 
+    this.id = null;
     this.months = null;
     this.years = null;
+  }
+
+  /**
+   * Set Id
+   * @param value
+   */
+  setId(value: string) {
+    this.id = value && value.trim() !== '' ? value : null;
+  }
+
+  /**
+   * Get Id
+   * @return {null|*}
+   */
+  getId() {
+    return this.id;
+  }
+
+  /**
+   * Generate Id
+   * @return {null|*}
+   */
+  generateId() {
+    this.id = UUID();
+    return this.id;
   }
 
   /**
@@ -53,6 +80,7 @@ export default class AgeModel extends Model {
    */
   getEntityMappings() {
     return {
+      id: this.generateId(),
       months: this.getMonths(),
       years: this.getYears(),
     };
@@ -64,7 +92,6 @@ export default class AgeModel extends Model {
    * @return {AgeModel}
    */
   hydrateFromEntity(entityDataValues) {
-    // console.log('entityDataValues: ', entityDataValues);
 
     this.instantiateFunctionWithDefinedValue('setMonths', entityDataValues.months);
     this.instantiateFunctionWithDefinedValue('setYears', entityDataValues.years);

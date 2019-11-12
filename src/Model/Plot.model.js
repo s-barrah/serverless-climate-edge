@@ -1,3 +1,5 @@
+import UUID from 'uuid/v4';
+
 import { Model } from '../Wrapper';
 
 /***
@@ -11,9 +13,35 @@ export default class PlotModel extends Model {
   constructor() {
     super();
 
+    this.id = null;
     this.title = null;
     this.size = null;
     this.varieties = null;
+  }
+
+  /**
+   * Set Id
+   * @param value
+   */
+  setId(value: string) {
+    this.id = value && value.trim() !== '' ? value : null;
+  }
+
+  /**
+   * Get Id
+   * @return {null|*}
+   */
+  getId() {
+    return this.id;
+  }
+
+  /**
+   * Generate Id
+   * @return {null|*}
+   */
+  generateId() {
+    this.id = UUID();
+    return this.id;
   }
 
   /**
@@ -37,7 +65,7 @@ export default class PlotModel extends Model {
    * @param value
    */
   setSize(value: string) {
-    this.size = value && value.trim() !== '' ? value : null;
+    this.size = value ? value : 'N/A';
   }
 
   /**
@@ -53,7 +81,7 @@ export default class PlotModel extends Model {
    * @param value
    */
   setVarieties(value: string) {
-    this.varieties = value && value.trim() !== '' ? value : null;
+    this.varieties = value ? value : null;
   }
 
   /**
@@ -83,6 +111,7 @@ export default class PlotModel extends Model {
    * @return {PlotModel}
    */
   hydrateFromEntity(entityDataValues) {
+
     this.instantiateFunctionWithDefinedValue('setTitle', entityDataValues.title);
     this.instantiateFunctionWithDefinedValue('setSize', entityDataValues.size);
     this.instantiateFunctionWithDefinedValue('setVarieties', entityDataValues.varieties);

@@ -1,3 +1,5 @@
+import UUID from 'uuid/v4';
+
 import { Model } from '../Wrapper';
 
 /***
@@ -8,13 +10,40 @@ export default class UserModel extends Model {
   /**
    * UserModel constructor
    */
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
+    this.id = null;
     this.firstName = null;
     this.lastName = null;
     this.partnerFullName = null;
     this.children = null;
+  }
+
+
+  /**
+   * Set Id
+   * @param value
+   */
+  setId(value: string) {
+    this.id = value && value.trim() !== '' ? value : null;
+  }
+
+  /**
+   * Get Id
+   * @return {null|*}
+   */
+  getId() {
+    return this.id;
+  }
+
+  /**
+   * Generate Id
+   * @return {null|*}
+   */
+  generateId() {
+    this.id = UUID();
+    return this.id;
   }
 
   /**
@@ -70,7 +99,7 @@ export default class UserModel extends Model {
    * @param value
    */
   setChildren(value: string) {
-    this.children = value && value.trim() !== '' ? value : null;
+    this.children = value ? value : null;
   }
 
   /**

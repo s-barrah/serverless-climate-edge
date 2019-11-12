@@ -37,10 +37,10 @@ export default class FileParserService {
   }
 
   getFileContent(data) {
-    return new Promise((resolve, reject) => {
+    /*return new Promise((resolve, reject) => {
       resolve(Object.values(data).map((file) => this.getData(file.content)).flat());
-    })
-    // return Object.values(data).map((file) => this.getData(file.content)).flat();
+    })*/
+    return Object.values(data).map((file) => this.getData(file.content)).flat();
   }
 
 }

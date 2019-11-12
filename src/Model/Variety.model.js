@@ -1,3 +1,5 @@
+import UUID from 'uuid/v4';
+
 import { Model } from '../Wrapper';
 
 /***
@@ -8,12 +10,39 @@ export default class VarietyModel extends Model {
   /**
    * VarietyModel constructor
    */
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
+    this.id = null;
     this.name = null;
     this.age = null;
     this.percentage = null;
+  }
+
+
+  /**
+   * Set Id
+   * @param value
+   */
+  setId(value: string) {
+    this.id = value && value.trim() !== '' ? value : null;
+  }
+
+  /**
+   * Get Id
+   * @return {null|*}
+   */
+  getId() {
+    return this.id;
+  }
+
+  /**
+   * Generate Id
+   * @return {null|*}
+   */
+  generateId() {
+    this.id = UUID();
+    return this.id;
   }
 
   /**
@@ -71,6 +100,7 @@ export default class VarietyModel extends Model {
    */
   getEntityMappings() {
     return {
+      id: this.generateId(),
       name: this.getName(),
       age: this.getAge(),
       percentage: this.getPercentage(),

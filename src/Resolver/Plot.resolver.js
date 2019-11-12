@@ -6,11 +6,15 @@ import VarietyResolver from '../Resolver/Variety.resolver';
 
 
 import { removeDuplicates, removeDuplicateByProp } from '../lib/Util';
+import {TABLE_DEFINITIONS, TABLES} from "../Config/Configuration";
+import DatabaseService from "../Service/Database.service";
 
 export default class PlotResolver {
 
-  constructor(data) {
-    this.data = data;
+  constructor(di) {
+    this.di = di;
+
+    this.table = TABLES[TABLE_DEFINITIONS.PLOT_TABLE];
   }
 
   getPlots() {
@@ -25,22 +29,59 @@ export default class PlotResolver {
     return removeDuplicates(cleanedResults);
   }
 
-  getEnrichedPlots() {
-    const varietyResolver = new VarietyResolver(this.data);
-    const varieties = varietyResolver.getVarieties();
+  async getRawData() {
+    const varietyResolver = new VarietyResolver(this.di);
+    const varieties = await varietyResolver.getAll();
+
+    console.log('Plot resolver varieties.length: ', varieties.length);
+
     return this.getPlots().map((plot) => {
       const getVarieties = varieties.filter((variety) => variety.plotName === plot.title);
-      const formattedList = this.getFormattedList(getVarieties);
-      return {
+      // console.log('Plot resolver getVarieties: ', getVarieties);
+      console.log('Plot resolver getVarieties.length: ', getVarieties.length);
+      const filteredVarietyList = this.getFilteredVarieties(getVarieties);
+      // console.log('Plot resolver formattedList: ', formattedList);
+      const filteredVarieties = getVarieties.filter((variety) => {
+        return {
+          name: variety.name,
+          age: variety.age ? variety.age : null,
+          percentage: variety.percentage ? variety.percentage : null,
+        }
+      });
+      const entity = {
         title: plot.title,
         size: plot.size,
-        varieties: formattedList ? formattedList : null
+        varieties: filteredVarietyList ? filteredVarietyList : null
       };
+      return new PlotModel().hydrateFromEntity(entity).getEntityMappings();
     });
   }
 
-  getFormattedList(data) {
+  getFilteredVarieties(data) {
+    this.data = data;
+    return data.map((variety) => {
+      return {
+        name: variety.name,
+        age: variety.age ? variety.age : null,
+        percentage: variety.percentage ? variety.percentage : null,
+      }
+    });
+    // return data.map((variety) => new VarietyModel().hydrateFromEntity(variety).getEntityMappings());
+  }
+  /*
+  getEnrichedVarieties(data) {
     return data.map((variety) => new VarietyModel().hydrateFromEntity(variety).getEntityMappings());
   }
+*/
+  async getAll() {
+    const databaseService = new DatabaseService(this.di);
+
+    return await databaseService.getEntries(this.table);
+  }
+
+  importFromFile(data) {
+    this.data = data;
+  }
+
 
 }

@@ -1,3 +1,5 @@
+import UUID from 'uuid/v4';
+
 import { Model } from '../Wrapper';
 
 /***

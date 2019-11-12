@@ -19,7 +19,7 @@ export default class UserResolver {
     });
   }
 
-  getPartners() {
+  getAllPartners() {
     return this.data.filter((item) => {
       return item['Partner Name'] !== undefined;
     });
@@ -33,36 +33,36 @@ export default class UserResolver {
     const allUsers = this.getUsers();
     const users = removeDuplicates(allUsers); // GET FILTERED USERS
 
-    const partners = this.getPartners();
+    const partners = this.getAllPartners();
 
     const results = users.map((user) => {
 
       const fullName = `${user.firstName} ${user.lastName}`;
-      const getPartner = partners.filter((obj) => {
+      const getUsersPartner = partners.filter((obj) => {
         return obj['Farmer Name'] === fullName;
       });
-      const cleanedPartnerList = removeDuplicates(getPartner);
-      const partner = cleanedPartnerList.length > 0 ? cleanedPartnerList[0]['Partner Name'] : undefined;
+      const usersPartner = removeDuplicates(getUsersPartner);
+      const partner = usersPartner.length > 0 ? usersPartner[0]['Partner Name'] : undefined;
       // console.log('cleanedPartnerList: ', cleanedPartnerList);
 
-      const getChildren = children.filter((obj) => {
+      const getUsersChildren = children.filter((obj) => {
         return obj.father === fullName;
       });
-      const cleanedChildrenList = removeDuplicates(getChildren);
+      const usersChildren = removeDuplicates(getUsersChildren);
 
-      const formattedList = cleanedChildrenList.map((child) => {
+      const childrenEntity = usersChildren.map((child) => {
         return {
+          id: child.id,
           fullName: child.fullName,
           age: child.age ? child.age : null,
         };
       });
-      // delete cleanedChildrenList.father;
 
       return {
         firstName : user.firstName,
         lastName : user.lastName,
         partnerFullName: partner ? partner : null,
-        children: formattedList ? formattedList : null,
+        children: childrenEntity ? childrenEntity : null,
       };
     });
 
@@ -103,7 +103,7 @@ export default class UserResolver {
         children: cleanedChildrenList ? cleanedChildrenList : null,
       };
     });*/
-    return results.filter((user) => user.firstName !== undefined);
+    return results.filter((user) => user.firstName !== undefined || user.lastName !== undefined);
   }
 
 }

@@ -20,7 +20,10 @@ provider:
     CHILD_TABLE: ${self:custom.CHILD_TABLE}
     AGE_TABLE: ${self:custom.AGE_TABLE}
     BASE_URL: ${self:custom.ENV_VARS.BASE_URL, file(./env.json):BASE_URL}
-    DYNAMODB_ENDPOINT: ${self:custom.ENV_VARS.DYNAMODB_ENDPOINT, file(./env.json):DYNAMODB_ENDPOINT}
+    DYNAMODB_LOCAL_STAGE: ${self:custom.ENV_VARS.DYNAMODB_LOCAL_STAGE, file(./env.json):DYNAMODB_LOCAL_STAGE}
+    DYNAMODB_LOCAL_ENDPOINT: ${self:custom.ENV_VARS.DYNAMODB_LOCAL_ENDPOINT, file(./env.json):DYNAMODB_LOCAL_ENDPOINT}
+    DYNAMODB_LOCAL_ACCESS_KEY_ID: ${self:custom.ENV_VARS.DYNAMODB_LOCAL_ACCESS_KEY_ID, file(./env.json):DYNAMODB_LOCAL_ACCESS_KEY_ID}
+    DYNAMODB_LOCAL_SECRET_ACCESS_KEY: ${self:custom.ENV_VARS.DYNAMODB_LOCAL_SECRET_ACCESS_KEY, file(./env.json):DYNAMODB_LOCAL_SECRET_ACCESS_KEY}
     INTERNAL_ACCESS_KEY: ${self:custom.ENV_VARS.INTERNAL_ACCESS_KEY, file(./env.json):INTERNAL_ACCESS_KEY}
     AUTH0_CLIENT_ID: ${self:custom.ENV_VARS.AUTH0_CLIENT_ID, file(./env.json):AUTH0_CLIENT_ID}
     AUTH0_CLIENT_PUBLIC_KEY_URL: ${self:custom.ENV_VARS.AUTH0_CLIENT_PUBLIC_KEY_URL, file(./env.json):AUTH0_CLIENT_PUBLIC_KEY_URL}
@@ -153,10 +156,10 @@ custom:
   PREFIX: ${self:service}-${self:custom.STAGE}
   ENV_VARS: ${file(./env.js):getEnvVars}
   STATION_TABLE: ${self:service}-stations-${opt:stage, self:provider.stage}
-  PLOT_TABLE: ${self:service}-plots-${opt:stage, self:provider.stage}
-  USER_TABLE: ${self:service}-users-${opt:stage, self:provider.stage}
-  VARIETY_TABLE: ${self:service}-variety-${opt:stage, self:provider.stage}
-  CHILD_TABLE: ${self:service}-child-${opt:stage, self:provider.stage}
+  PLOT_TABLE: ${self:service}-plots-table-${opt:stage, self:provider.stage}
+  USER_TABLE: ${self:service}-users-table-${opt:stage, self:provider.stage}
+  VARIETY_TABLE: ${self:service}-variety-table-${opt:stage, self:provider.stage}
+  CHILD_TABLE: ${self:service}-child-table-${opt:stage, self:provider.stage}
   AGE_TABLE: ${self:service}-age-${opt:stage, self:provider.stage}
   TABLE_THROUGHPUTS:
     prod: 5
@@ -167,7 +170,7 @@ custom:
     stages:
       - dev
     start:
-      port: 8010
+      port: 8003
       inMemory: true
       heapInitial: 200m
       heapMax: 1g
