@@ -5,6 +5,12 @@ import {
   ResponseModel,
 } from '../../Wrapper/index';
 
+import CONFIGURATION from '../../Config/Configuration';
+
+import PlotResolver from '../../Resolver/Plot.resolver';
+
+import { getCount } from '../../lib/Util';
+
 /**
  * Get all plots entities
  *
@@ -32,7 +38,7 @@ import {
  *         ]
  *       },
  *      ],
- *      "message": "Successfully retrieved data!"
+ *      "message": "1 records found"
  *    }
  *
 
@@ -44,21 +50,22 @@ import {
  *    }
  *
  */
-import CONFIGURATION, {DEFINITIONS, TABLES} from '../../Config/Configuration';
 
-export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: RequestService, done) => {
+export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, request: RequestService, done) => {
   let response = {};
 
-  di.get(DEFINITIONS.DATABASE).getEntries(TABLES.PLOT_TABLE)
-    .then((data) => {
-      response = new ResponseModel(data, 200, 'Successfully retrieved data!');
-    })
-    .catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      done(null, response.generate());
-    });
+  try {
+    const plotResolver = new PlotResolver(di);
+    const plots = await plotResolver.getAll();
 
+    const count = getCount(plots);
+
+    response = new ResponseModel(plots, 200, `${count} found`);
+
+  } catch (e) {
+    console.log('Get Plots error - ', e);
+    response = new ResponseModel({}, 500, 'Unknown error.');
+  }
+
+  done(null, response.generate());
 });

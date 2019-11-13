@@ -14,6 +14,25 @@ Resources:
         ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
         WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
 
+  SensorTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:provider.environment.SENSOR_TABLE}
+      AttributeDefinitions:
+        - AttributeName: stationId
+          AttributeType: N
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: stationId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      # Set the capacity based on the stage
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+        WriteCapacityUnits: ${self:custom.TABLE_THROUGHPUT}
+
   PlotTable:
     Type: AWS::DynamoDB::Table
     Properties:

@@ -14,6 +14,7 @@ provider:
     REGION: ${self:custom.REGION}
     STAGE: ${self:custom.STAGE}
     STATION_TABLE: ${self:custom.STATION_TABLE}
+    SENSOR_TABLE: ${self:custom.SENSOR_TABLE}
     PLOT_TABLE: ${self:custom.PLOT_TABLE}
     USER_TABLE: ${self:custom.USER_TABLE}
     VARIETY_TABLE: ${self:custom.VARIETY_TABLE}
@@ -95,6 +96,14 @@ functions:
           method: get
           cors: true
 
+  get_chart:
+    handler: handler.STATION_GET_CHART
+    events:
+      - http:
+          path: chart/{stationId}
+          method: get
+          cors: true
+
   get_ages:
     handler: handler.GET_AGES
     events:
@@ -156,6 +165,7 @@ custom:
   PREFIX: ${self:service}-${self:custom.STAGE}
   ENV_VARS: ${file(./env.js):getEnvVars}
   STATION_TABLE: ${self:service}-stations-${opt:stage, self:provider.stage}
+  SENSOR_TABLE: ${self:service}-sensors-${opt:stage, self:provider.stage}
   PLOT_TABLE: ${self:service}-plots-table-${opt:stage, self:provider.stage}
   USER_TABLE: ${self:service}-users-table-${opt:stage, self:provider.stage}
   VARIETY_TABLE: ${self:service}-variety-table-${opt:stage, self:provider.stage}
@@ -170,7 +180,7 @@ custom:
     stages:
       - dev
     start:
-      port: 8003
+      port: 8004
       inMemory: true
       heapInitial: 200m
       heapMax: 1g

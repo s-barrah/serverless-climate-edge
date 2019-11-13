@@ -38,7 +38,7 @@ export default class SensorService extends DependencyAwareClass {
     const filteredData = this.filterEmptyData(data); // remove empty properties
 
     Object.getOwnPropertyNames(filteredData[0]).forEach((prop) => {
-      if (prop !== 'timestamp') {
+      if (prop !== 'timestamp' && prop !== 'id' && prop !== 'stationId') {
         if (results[prop] === undefined) {
           results[prop] = {};
         }
@@ -56,7 +56,7 @@ export default class SensorService extends DependencyAwareClass {
     const processedData = this.processChartSensorData(data);
 
     Object.getOwnPropertyNames(processedData[0]).forEach((prop) => {
-      if (prop !== 'timestamp') {
+      if (prop !== 'timestamp' && prop !== 'id' && prop !== 'stationId') {
         results[prop] = this.getChartValues(processedData, prop);
       }
     });

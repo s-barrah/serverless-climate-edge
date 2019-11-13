@@ -13,6 +13,8 @@ export default class SensorModel extends Model {
   constructor() {
     super();
 
+    this._id = null;
+    this._stationId = null;
     this._timestamp = null;
     this._air_temperature = null;
     this._soil_temperature = null;
@@ -33,6 +35,39 @@ export default class SensorModel extends Model {
 
   dividedByThousand(value: string) {
     return value && value !== '' ? value / this.thousandth : null;
+  }
+
+  /**
+   * Get Id
+   * @return {null|*}
+   */
+  getId() {
+    return this._id;
+  }
+
+  /**
+   * Generate Id
+   * @return {null|*}
+   */
+  generateId() {
+    this._id = UUID();
+    return this._id;
+  }
+
+  /**
+   * Set Station Id
+   * @param value
+   */
+  setStationId(value: string) {
+    this._stationId = value !== '' ? value : null;
+  }
+
+  /**
+   * Get Station Id
+   * @return {null|*}
+   */
+  getStationId() {
+    return this._stationId;
   }
 
   /**
@@ -307,6 +342,8 @@ export default class SensorModel extends Model {
    */
   getEntityMappings() {
     return {
+      id: this.generateId(),
+      stationId: this.getStationId(),
       timestamp: this.getTimestamp(),
       airTemperature: this.getAirTemperature(),
       soilTemperature: this.getSoilTemperature(),
@@ -332,6 +369,7 @@ export default class SensorModel extends Model {
    * @return {SensorModel}
    */
   hydrateFromEntity(entityDataValues) {
+    this.instantiateFunctionWithDefinedValue('setStationId', entityDataValues.stationId);
     this.instantiateFunctionWithDefinedValue('setTimestamp', entityDataValues.timestamp);
     this.instantiateFunctionWithDefinedValue('setAirTemperature', entityDataValues.airTemperature);
     this.instantiateFunctionWithDefinedValue('setSoilTemperature', entityDataValues.soilTemperature);

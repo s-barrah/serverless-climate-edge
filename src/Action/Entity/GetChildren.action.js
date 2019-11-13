@@ -5,6 +5,12 @@ import {
   ResponseModel,
 } from '../../Wrapper/index';
 
+import CONFIGURATION from '../../Config/Configuration';
+
+import ChildResolver from '../../Resolver/Child.resolver';
+
+import { getCount } from '../../lib/Util';
+
 /**
  * Get all children entities
  *
@@ -21,18 +27,12 @@ import {
  *    {
  *      "data": [
  *       {
- *         fullName: 'Test'
- *         age: {
- *           months: null
- *           years: 5,
- *         },
+ *         fullName: "Marco Antonio Lazo"
+ *         age: "23 years",
  *       },
  *       {
- *         fullName: 'John Green'
- *         age: {
- *           months: null
- *           years: 21,
- *         },
+ *         fullName: "Glory Martinez Reyes"
+ *         age: "11 years",
  *       },
  *      ],
  *      "message": "Successfully retrieved data!"
@@ -47,21 +47,22 @@ import {
  *    }
  *
  */
-import CONFIGURATION, {DEFINITIONS, TABLES} from '../../Config/Configuration';
 
-export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: RequestService, done) => {
+export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, request: RequestService, done) => {
   let response = {};
 
-  di.get(DEFINITIONS.DATABASE).getEntries(TABLES.CHILD_TABLE)
-    .then((data) => {
-      response = new ResponseModel(data, 200, 'Successfully retrieved data!');
-    })
-    .catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      done(null, response.generate());
-    });
+  try {
+    const childResolver = new ChildResolver(di);
+    const children = await childResolver.getAll();
+    const results = childResolver.getFormattedList(children);
 
+    const count = getCount(results);
+
+    response = new ResponseModel(results, 200, `${count} found`);
+  } catch (e) {
+    console.log('Get Children Error - ', e);
+    response = new ResponseModel({}, 500, 'Unknown error.');
+  }
+
+  done(null, response.generate());
 });

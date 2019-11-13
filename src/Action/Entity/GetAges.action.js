@@ -5,6 +5,12 @@ import {
   ResponseModel,
 } from '../../Wrapper/index';
 
+import CONFIGURATION from '../../Config/Configuration';
+
+import AgeResolver from "../../Resolver/Age.resolver";
+
+import { getCount } from '../../lib/Util';
+
 /**
  * Get all age entities
  *
@@ -45,21 +51,23 @@ import {
  *    }
  *
  */
-import CONFIGURATION, {DEFINITIONS, TABLES} from '../../Config/Configuration';
 
-export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: RequestService, done) => {
+export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, request: RequestService, done) => {
   let response = {};
 
-  di.get(DEFINITIONS.DATABASE).getEntries(TABLES.AGE_TABLE)
-    .then((data) => {
-      response = new ResponseModel(data, 200, 'Successfully retrieved data!');
-    })
-    .catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      done(null, response.generate());
-    });
+  try {
+    const ageResolver = new AgeResolver(di);
+    const results = await ageResolver.getAll();
+
+    const count = getCount(results);
+
+    response = new ResponseModel(results, 200, `${count} found`);
+
+  } catch (e) {
+    console.log('GetAgesError - ', e);
+    response = new ResponseModel({}, 500, 'Unknown error.');
+  }
+
+  done(null, response.generate());
 
 });

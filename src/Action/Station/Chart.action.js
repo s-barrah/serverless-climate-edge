@@ -6,10 +6,9 @@ import {
 } from '../../Wrapper/index';
 
 
-import CONFIGURATION, { DEFINITIONS } from '../../Config/Configuration';
+import CONFIGURATION, { DEFINITIONS, TABLES } from '../../Config/Configuration';
 
-// Define the request constraints
-import requestConstraints from '../../Constraints/Station/Get.constraints.json';
+import SensorService from '../../Service/Sensor.service';
 
 /***
  * Get chart data
@@ -22,24 +21,46 @@ import requestConstraints from '../../Constraints/Station/Get.constraints.json';
  *
  *
  */
-export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: RequestService, done) => {
+export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, request: RequestService, done) => {
   let response = {};
 
-  const stationId = request.get('stationId');
+  const stationId = request.getPathParameter('stationId', null);
 
-  request.validateAgainstConstraints(requestConstraints)
-    .then(() => {
-      return di.get(DEFINITIONS.DATABASE).getEntry(stationId);
-    })
-    .then(() => {
-      response = new ResponseModel({}, 200, 'Chart data has been processed');
-    })
-    .catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      done(null, response.generate());
-    });
+  if (stationId) {
+
+    const id = parseInt(stationId, 10);
+
+    const params = di.get(DEFINITIONS.DATABASE).getStationTableParam(TABLES.STATION_TABLE, id);
+    const results = await di.get(DEFINITIONS.DATABASE).query(params);
+    if (results && results.Items) {
+
+      const sensorParams = di.get(DEFINITIONS.DATABASE).getStationTableParam(TABLES.SENSOR_TABLE, id);
+      const stationSensors = await di.get(DEFINITIONS.DATABASE).query(sensorParams);
+
+      const items =  stationSensors.Items ? stationSensors.Items : [];
+      if (items.length > 0) {
+
+        const sensorService = new SensorService();
+        const chartData = sensorService.getChartData(items);
+
+        let storage = {
+          stationId: id,
+            ...chartData,
+        };
+        response = new ResponseModel(storage, 200, 'Success');
+      } else {
+        response = new ResponseModel({}, 200, `No sensor data found for Station - ${id}`);
+      }
+
+
+    } else {
+      response = new ResponseModel({}, 200, 'No records found');
+    }
+
+  } else {
+    response = new ResponseModel({}, 500, 'No station id provided');
+  }
+
+  done(null, response.generate());
 
 });

@@ -43,150 +43,48 @@ export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, requ
   const ageResolver = new AgeResolver(di);
   const varietyResolver = new VarietyResolver(di);
   const plotResolver = new PlotResolver(di);
+  const childResolver = new ChildResolver(di);
+  const userResolver = new UserResolver(di);
 
-  // const varietyResolver = new VarietyResolver().importFromFile(data);
-  /*
-  const childResolver = new ChildResolver(data);
-  const userResolver = new UserResolver(data);
-  const plotResolver = new PlotResolver(data);*/
+  ageResolver.importFromFile(data); // get import data
 
-  ageResolver.importFromFile(data);
+  const ages = ageResolver.getRawData(); // hydrate and return entities
 
-  const ages = ageResolver.getRawData();
-  // const varieties = varietyResolver.getFormattedVarieties();
+  // PROCESS AGES
+  await di.get(DEFINITIONS.DATABASE).processBatches(ages, TABLES.AGE_TABLE); // store to db
 
- /* const users = userResolver.getEnrichedUsers();
-  const children = childResolver.getFormattedChildren();
-  const varieties = varietyResolver.getFormattedVarieties();
-  const plots = plotResolver.getEnrichedPlots();*/
-
-  await di.get(DEFINITIONS.DATABASE).processBatches(ages, TABLES.AGE_TABLE);
-    /*.then(() => {
-      console.log('Processed Ages');
-    })
-    .catch((error) => {
-      console.log('Error with processing Ages');
-      response = new ResponseModel({}, 500, 'Error with processing Ages');
-    });*/
-/*
-  const ageBatchWrites = di.get(DEFINITIONS.DATABASE).createBatchWrite(ages);
-  const ageChunkArrays = di.get(DEFINITIONS.DATABASE).createChunks(ageBatchWrites, 20);
-
-  const tableName = TABLES[TABLE_DEFINITIONS.STATION_TABLE];
-  // await di.get(DEFINITIONS.DATABASE).createEntry(stationModel.getEntityMappings(), tableName);
-  await Promise.all(
-    ageChunkArrays.map((chunk) => {
-      di.get(DEFINITIONS.DATABASE).batchWrite(chunk, TABLES[TABLE_DEFINITIONS.AGE_TABLE])
-
-    }));*/
-  // const ageResults = await ageResolver.getAll();
+  // PROCESS VARIETIES
+  varietyResolver.importFromFile(data); // get import data
+  const varieties = await varietyResolver.getRawData(); // hydrate and return entities
+  await di.get(DEFINITIONS.DATABASE).processBatches(varieties, TABLES.VARIETY_TABLE); // store to db
 
 
-  varietyResolver.importFromFile(data);
-  const varieties = await varietyResolver.getRawData();
-  console.log('===================varieties==============');
-  // console.log(varieties);
-  console.log('FileUpload varieties.length: ', varieties.length);
-  console.log('===================varieties==============');
-  await di.get(DEFINITIONS.DATABASE).processBatches(varieties, TABLES.VARIETY_TABLE, 'name', 'age');
-    /*.then(() => {
-      console.log('Processed Variety');
-    })
-    .catch((error) => {
-      console.log('Error with processing Variety');
-      response = new ResponseModel({}, 500, 'Error with processing Variety');
-    });*/
-/*
-  const varietyBatchWrites = di.get(DEFINITIONS.DATABASE).createBatchWrite(varieties);
-  const varietyChunkArrays = di.get(DEFINITIONS.DATABASE).createChunks(varietyBatchWrites, 20);
-
-  // await di.get(DEFINITIONS.DATABASE).createEntry(stationModel.getEntityMappings(), tableName);
-  await Promise.all(
-    varietyChunkArrays.map((chunk) => {
-      di.get(DEFINITIONS.DATABASE).batchWrite(chunk, TABLES[TABLE_DEFINITIONS.VARIETY_TABLE])
-
-    }));*/
-  // const varietyResults = await varietyResolver.getAll();
-  const varietyResults = await varietyResolver.getAll();
-  console.log(varietyResults);
-
-
-  plotResolver.importFromFile(data);
-  const plots = await plotResolver.getRawData();
-  console.log('===================plots==============');
-  console.log(plots);
-  console.log(plots.length);
-  console.log('===================plots==============');
-  await di.get(DEFINITIONS.DATABASE).processBatches(plots, TABLES.PLOT_TABLE);
-
+  // PROCESS PLOTS
+  plotResolver.importFromFile(data); // get import data
+  const plots = await plotResolver.getRawData(); // hydrate and return entities
+  await di.get(DEFINITIONS.DATABASE).processBatches(plots, TABLES.PLOT_TABLE); // store to db
 
   const plotResults = await plotResolver.getAll();
 
-  response = new ResponseModel({ results: plotResults, length: plotResults.length }, 200, 'Retrieved Varieties from db');
+  // PROCESS CHILDREN
+  childResolver.importFromFile(data); // get import data
+  const children = await childResolver.getChildren(); // hydrate and return entities
+  await di.get(DEFINITIONS.DATABASE).processBatches(children, TABLES.CHILD_TABLE); // store to db
 
-    /*.then(async () => {
-      console.log('Processed Plots');
-      const plotResults = await plotResolver.getAll();
+  const childrenResults = await childResolver.getAll();
+  // console.log(children);
 
-      response = new ResponseModel({ results: plotResults, length: plotResults.length }, 200, 'Retrieved Varieties from db');
-    })
-    .catch((error) => {
-      console.log('Error with processing Plots');
-      response = new ResponseModel({}, 500, 'Error with processing Plots');
-    });*/
-
-
-
-    // .then((data) => {
+  // PROCESS USERS
+  userResolver.importFromFile(data); // get import data
+  const users = await userResolver.getRawData(); // hydrate and return entities
+  console.log(users);
+  await di.get(DEFINITIONS.DATABASE).processBatches(users, TABLES.USER_TABLE); // store to db
 
 
+  const userResults = await userResolver.getAll();
 
-      // const ageBatchWrites = di.get(DEFINITIONS.DATABASE).createBatchWrite(ages);
-      // const chunkArrays = di.get(DEFINITIONS.DATABASE).createChunks(ageBatchWrites, 20);
-      //
+  response = new ResponseModel({ userResults }, 200, `Retrieved ${userResults.length} results from db`);
 
-      // console.log(ageBatchWrites);
-      /*const chunkArrays = di.get(DEFINITIONS.DATABASE).createChunks(ageBatchWrites, 20);
-
-      // return di.get(DEFINITIONS.DATABASE).batchProcessWrite(ageBatchWrites, TABLES[TABLE_DEFINITIONS.AGE_TABLE]);
-      return Promise.all(
-        chunkArrays.map((chunk) => {
-          di.get(DEFINITIONS.DATABASE).batchWrite(chunk, TABLES[TABLE_DEFINITIONS.AGE_TABLE])
-
-        }))*/
-      /*response = new ResponseModel({
-        ages,
-        chunkArrays
-      }, 200, 'Age data stored in database');*/
-      // return di.get(DEFINITIONS.DATABASE).createBatchWrite(ages);
-      // return chunkArrays;
-    /*  return new Promise((resolve) => {
-        const tableName = TABLES[TABLE_DEFINITIONS.AGE_TABLE];
-        const stagePromises = ages.map((chunk) => {
-          di.get(DEFINITIONS.DATABASE).createEntry(chunk, tableName)
-
-        });
-        return Promise.all(stagePromises)
-          .catch((error) => {
-            console.error(error);
-          })
-          .then(() => {
-            resolve();
-          });
-      });*/
-      // response = new ResponseModel({}, 200, 'Success!');
-   // })
-    /*.then((results) => {
-      response = new ResponseModel(results, 200, 'Age data stored in database');
-    })*/
-    /*.catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      // console.log('Done');
-      done(null, response.generate());
-    });*/
 
   done(null, response.generate());
 });

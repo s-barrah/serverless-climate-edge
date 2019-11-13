@@ -92,7 +92,7 @@ export default class DatabaseService extends DependencyAwareClass {
   }
 
 
-  async getEntry(key: object, tableName: string) {
+  async getEntry(key: number, tableName: string) {
 
     console.log('key: ', key);
 
@@ -111,16 +111,23 @@ export default class DatabaseService extends DependencyAwareClass {
 
 
   async createEntry(data: Object, tableName) {
-    try {
-      const params = {
-        TableName: tableName,
-        Item: data,
-      };
-      console.log('Creating entry');
-      await this.create(params);
-    } catch (error) {
-      console.error(`createEntry-error: ${error}`);
+
+    const params = this.getQueryParams(data, tableName); // get query params
+    const queryResults = await this.query(params); // query table
+
+    if (queryResults.Items.length === 0 && queryResults.Count === 0 && queryResults.ScannedCount === 0) {
+      try {
+        const params = {
+          TableName: tableName,
+          Item: data,
+        };
+        console.log('Creating entry');
+        await this.create(params);
+      } catch (error) {
+        console.error(`createEntry-error: ${error}`);
+      }
     }
+
   }
 
   async delete(key: object, tableName: string) {
@@ -147,6 +154,7 @@ export default class DatabaseService extends DependencyAwareClass {
       this.Timer.stop(`dynamoDb-query-${params.TableName}-item`);
       return results;
     } catch (error) {
+      console.error(params);
       console.error(`query-error-${params.TableName}: ${error}`);
     }
   }
@@ -321,8 +329,38 @@ export default class DatabaseService extends DependencyAwareClass {
             ':partnerFullNameVal' : item.partnerFullName,
           }
         };
+      case TABLES.STATION_TABLE:
+        return {
+          TableName: table,
+          KeyConditionExpression : 'stationId = :stationIdVal',
+          ExpressionAttributeValues : {
+            ':stationIdVal' : item.stationId,
+          }
+        };
+      case TABLES.SENSOR_TABLE:
+        return {
+          TableName: table,
+          KeyConditionExpression : 'stationId = :stationIdVal',
+          FilterExpression : 'airTemperature = :airTemperatureVal and soilTemperature = :soilTemperatureVal',
+          ExpressionAttributeValues : {
+            ':stationIdVal' : item.stationId,
+            ':airTemperatureVal' : item.airTemperature,
+            ':soilTemperatureVal' : item.soilTemperature,
+          }
+        };
       default:
         return null;
+    }
+  }
+
+  getStationTableParam(table, id) {
+    this.table = table;
+    return {
+      TableName: this.table,
+      KeyConditionExpression : 'stationId = :stationIdVal',
+      ExpressionAttributeValues : {
+        ':stationIdVal' : id,
+      }
     }
   }
 

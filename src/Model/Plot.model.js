@@ -49,7 +49,7 @@ export default class PlotModel extends Model {
    * @param value
    */
   setTitle(value: string) {
-    this.title = value && value.trim() !== '' ? value : null;
+    this.title = value !== '' ? value : null;
   }
 
   /**

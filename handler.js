@@ -3,8 +3,9 @@ export { default as STATUS } from './src/Action/Status.action';
 /**
  * STATION ACTIONS
  */
-export { default as STATION_SUBMIT } from './src/Action/Station/Store.action';
+export { default as STATION_SUBMIT } from './src/Action/Station/Submit.action';
 export { default as STATION_GET } from './src/Action/Station/Get.action';
+export { default as STATION_GET_CHART } from './src/Action/Station/Chart.action';
 
 /**
  * ENTITY ACTIONS

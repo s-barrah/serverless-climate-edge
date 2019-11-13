@@ -5,6 +5,12 @@ import {
   ResponseModel,
 } from '../../Wrapper/index';
 
+import CONFIGURATION, {DEFINITIONS, TABLES} from '../../Config/Configuration';
+
+import VarietyResolver from '../../Resolver/Variety.resolver';
+
+import { getCount } from '../../lib/Util';
+
 /**
  * Get all varieties entities
  *
@@ -44,21 +50,24 @@ import {
  *    }
  *
  */
-import CONFIGURATION, {DEFINITIONS, TABLES} from '../../Config/Configuration';
 
-export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: RequestService, done) => {
+
+export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, request: RequestService, done) => {
   let response = {};
 
-  di.get(DEFINITIONS.DATABASE).getEntries(TABLES.VARIETY_TABLE)
-    .then((data) => {
-      response = new ResponseModel(data, 200, 'Successfully retrieved data!');
-    })
-    .catch((error) => {
-      console.error(error);
-      response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
-    })
-    .then(() => {
-      done(null, response.generate());
-    });
+  try {
+    const varietyResolver = new VarietyResolver(di);
+    const varieties = await varietyResolver.getAll();
+
+    const count = getCount(varieties);
+
+    response = new ResponseModel(varieties, 200, `${count} found`);
+
+  } catch (e) {
+    console.log('Get Varieties Error - ', e);
+    response = new ResponseModel({}, 500, 'Unknown error.');
+  }
+
+  done(null, response.generate());
 
 });

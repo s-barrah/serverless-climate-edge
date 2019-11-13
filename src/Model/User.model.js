@@ -20,15 +20,6 @@ export default class UserModel extends Model {
     this.children = null;
   }
 
-
-  /**
-   * Set Id
-   * @param value
-   */
-  setId(value: string) {
-    this.id = value && value.trim() !== '' ? value : null;
-  }
-
   /**
    * Get Id
    * @return {null|*}
@@ -51,7 +42,7 @@ export default class UserModel extends Model {
    * @param value
    */
   setFirstName(value: string) {
-    this.firstName = value && value.trim() !== '' ? value : null;
+    this.firstName = value !== '' ? value : null;
   }
 
   /**
@@ -67,7 +58,7 @@ export default class UserModel extends Model {
    * @param value
    */
   setLastName(value: string) {
-    this.lastName = value && value.trim() !== '' ? value : null;
+    this.lastName = value !== '' ? value : null;
   }
 
   /**
@@ -83,7 +74,7 @@ export default class UserModel extends Model {
    * @param value
    */
   setPartnerFullName(value: string) {
-    this.partnerFullName = value && value.trim() !== '' ? value : null;
+    this.partnerFullName = value !== '' ? value : null;
   }
 
   /**

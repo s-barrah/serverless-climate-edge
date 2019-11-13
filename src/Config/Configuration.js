@@ -20,6 +20,7 @@ export const DEPENDENCIES = {
 // Define Tables
 export const TABLE_DEFINITIONS = {
   STATION_TABLE: 'STATION_TABLE',
+  SENSOR_TABLE: 'SENSOR_TABLE',
   PLOT_TABLE: 'PLOT_TABLE',
   USER_TABLE: 'USER_TABLE',
   VARIETY_TABLE: 'VARIETY_TABLE',
@@ -29,6 +30,7 @@ export const TABLE_DEFINITIONS = {
 
 export const TABLES = {
   [TABLE_DEFINITIONS.STATION_TABLE]: typeof process.env.STATION_TABLE !== 'undefined' ? process.env.STATION_TABLE : '',
+  [TABLE_DEFINITIONS.SENSOR_TABLE]: typeof process.env.SENSOR_TABLE !== 'undefined' ? process.env.SENSOR_TABLE : '',
   [TABLE_DEFINITIONS.PLOT_TABLE]: typeof process.env.PLOT_TABLE !== 'undefined' ? process.env.PLOT_TABLE : '',
   [TABLE_DEFINITIONS.USER_TABLE]: typeof process.env.USER_TABLE !== 'undefined' ? process.env.USER_TABLE : '',
   [TABLE_DEFINITIONS.VARIETY_TABLE]: typeof process.env.VARIETY_TABLE !== 'undefined' ? process.env.VARIETY_TABLE : '',

@@ -4,7 +4,7 @@ import VarietyModel from '../Model/Variety.model';
 import AgeResolver from "./Age.resolver";
 
 import { removeDuplicates, removeDuplicateByProp } from '../lib/Util';
-import {TABLE_DEFINITIONS, TABLES} from "../Config/Configuration";
+import { TABLES } from "../Config/Configuration";
 import DatabaseService from "../Service/Database.service";
 
 export default class VarietyResolver {
@@ -12,7 +12,7 @@ export default class VarietyResolver {
   constructor(di) {
     this.di = di;
 
-    this.table = TABLES[TABLE_DEFINITIONS.VARIETY_TABLE];
+    this.table = TABLES.VARIETY_TABLE;
   }
 
   formatVarieties(data) {

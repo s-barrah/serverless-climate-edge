@@ -6,7 +6,7 @@ import VarietyResolver from '../Resolver/Variety.resolver';
 
 
 import { removeDuplicates, removeDuplicateByProp } from '../lib/Util';
-import {TABLE_DEFINITIONS, TABLES} from "../Config/Configuration";
+import { TABLES } from "../Config/Configuration";
 import DatabaseService from "../Service/Database.service";
 
 export default class PlotResolver {
@@ -14,7 +14,7 @@ export default class PlotResolver {
   constructor(di) {
     this.di = di;
 
-    this.table = TABLES[TABLE_DEFINITIONS.PLOT_TABLE];
+    this.table = TABLES.PLOT_TABLE;
   }
 
   getPlots() {

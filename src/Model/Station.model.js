@@ -24,6 +24,9 @@ export default class StationModel extends Model {
     // console.log('entity.data: ', entity.data);
     if (entity.data) {
       entity.data.forEach((sensorEntity) => {
+        if (sensorEntity.stationId === undefined) {
+          sensorEntity.stationId = this.getStationId();
+        }
         const sensorModel = new SensorModel().hydrateFromEntity(sensorEntity);
         this._sensor_data.push(sensorModel.getEntityMappings());
       })

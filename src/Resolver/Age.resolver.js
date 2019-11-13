@@ -17,7 +17,7 @@ export default class AgeResolver {
   constructor(di) {
     this.di = di;
 
-    this.table = TABLES[TABLE_DEFINITIONS.AGE_TABLE];
+    this.table = TABLES.AGE_TABLE;
   }
 
   getRawData() {
