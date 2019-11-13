@@ -1,7 +1,7 @@
 import { DependencyAwareClass } from '../Wrapper'
 
 
-export default class SensorService extends DependencyAwareClass {
+export default class DataProcessingService extends DependencyAwareClass {
 
 
   getMinValue(data, prop) {

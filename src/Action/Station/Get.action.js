@@ -8,7 +8,7 @@ import {
 
 import CONFIGURATION, { DEFINITIONS, TABLES } from '../../Config/Configuration';
 
-import SensorService from '../../Service/Sensor.service';
+import DataProcessingService from '../../Service/DataProcessing.service';
 
 
 /***
@@ -41,8 +41,8 @@ export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, requ
       const items =  stationSensors.Items ? stationSensors.Items : [];
       if (items.length > 0) {
 
-        const sensorService = new SensorService();
-        const processedResponse = sensorService.processedResponse(items);
+        const dataProcessingService = new DataProcessingService();
+        const processedResponse = dataProcessingService.processedResponse(items);
 
         let storage = {
           ...results.Items[0],

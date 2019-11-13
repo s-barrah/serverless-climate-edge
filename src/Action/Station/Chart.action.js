@@ -8,7 +8,7 @@ import {
 
 import CONFIGURATION, { DEFINITIONS, TABLES } from '../../Config/Configuration';
 
-import SensorService from '../../Service/Sensor.service';
+import DataProcessingService from '../../Service/DataProcessing.service';
 
 /***
  * Get chart data
@@ -40,8 +40,8 @@ export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, requ
       const items =  stationSensors.Items ? stationSensors.Items : [];
       if (items.length > 0) {
 
-        const sensorService = new SensorService();
-        const chartData = sensorService.getChartData(items);
+        const dataProcessingService = new DataProcessingService();
+        const chartData = dataProcessingService.getChartData(items);
 
         let storage = {
           stationId: id,

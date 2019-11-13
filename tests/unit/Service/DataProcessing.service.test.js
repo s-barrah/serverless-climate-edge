@@ -2,7 +2,7 @@ import ServerlessMochaPlugin from 'serverless-mocha-plugin';
 
 import StationModel from '../../../src/Model/Station.model';
 
-import SensorService from '../../../src/Service/Sensor.service';
+import DataProcessingService from '../../../src/Service/DataProcessing.service';
 
 let expect = ServerlessMochaPlugin.chai.expect;
 
@@ -14,8 +14,8 @@ describe('Service/Sensor.service', () => {
   describe('Ensure data processes completely', () => {
 
     const stationModel = new StationModel(stationMock);
-    const sensorService = new SensorService();
-    const processedResponse = sensorService.processedResponse(stationModel.getSensorData());
+    const dataProcessingService = new DataProcessingService();
+    const processedResponse = dataProcessingService.processedResponse(stationModel.getSensorData());
 
     it('should return the processed response', () => {
       expect(processedResponse).to.have.property('airTemperature');
@@ -38,8 +38,8 @@ describe('Service/Sensor.service', () => {
   describe('Process latest, minimum, maximum and mean values', () => {
 
     const stationModel = new StationModel(stationMock);
-    const sensorService = new SensorService();
-    const processedResponse = sensorService.processedResponse(stationModel.getSensorData());
+    const dataProcessingService = new DataProcessingService();
+    const processedResponse = dataProcessingService.processedResponse(stationModel.getSensorData());
 
     it('should return the LATEST Air Temperature value', () => {
       expect(processedResponse.airTemperature.latest).to.eql(25.76);
@@ -237,8 +237,8 @@ describe('Service/Sensor.service', () => {
   describe('Process and return chart data', () => {
 
     const stationModel = new StationModel(stationMock);
-    const sensorService = new SensorService();
-    const chartData = sensorService.getChartData(stationModel.getSensorData());
+    const dataProcessingService = new DataProcessingService();
+    const chartData = dataProcessingService.getChartData(stationModel.getSensorData());
 
     it('should return an array of arrays containing the Air Temperature chart values', () => {
       expect(chartData.airTemperature.length).to.eql(4);
