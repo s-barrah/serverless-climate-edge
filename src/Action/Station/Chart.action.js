@@ -49,12 +49,12 @@ export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, requ
         };
         response = new ResponseModel(storage, 200, 'Success');
       } else {
-        response = new ResponseModel({}, 200, `No sensor data found for Station - ${id}`);
+        response = new ResponseModel({}, 500, `No sensor data found for Station - ${id}`);
       }
 
 
     } else {
-      response = new ResponseModel({}, 200, 'No records found');
+      response = new ResponseModel({}, 500, 'No records found');
     }
 
   } else {

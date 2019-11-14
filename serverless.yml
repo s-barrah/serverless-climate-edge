@@ -88,11 +88,20 @@ functions:
           method: post
           cors: true
 
+      - http:
+          path: data
+          method: post
+          cors: true
+
   get_station:
     handler: handler.STATION_GET
     events:
       - http:
           path: data/{stationId}
+          method: get
+          cors: true
+      - http:
+          path: data
           method: get
           cors: true
 
@@ -101,6 +110,11 @@ functions:
     events:
       - http:
           path: chart/{stationId}
+          method: get
+          cors: true
+
+      - http:
+          path: chart
           method: get
           cors: true
 
