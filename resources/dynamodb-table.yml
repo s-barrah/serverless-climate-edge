@@ -73,7 +73,7 @@ Resources:
       TableName: ${self:provider.environment.VARIETY_TABLE}
       AttributeDefinitions:
         - AttributeName: id
-          AttributeType: S
+          AttributeType: N
         - AttributeName: name
           AttributeType: S
       KeySchema:
@@ -107,7 +107,7 @@ Resources:
       TableName: ${self:provider.environment.AGE_TABLE}
       AttributeDefinitions:
         - AttributeName: id
-          AttributeType: S
+          AttributeType: N
       KeySchema:
         - AttributeName: id
           KeyType: HASH

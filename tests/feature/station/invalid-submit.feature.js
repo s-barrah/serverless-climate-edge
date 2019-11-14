@@ -4,12 +4,14 @@ import StationAction from '../../lib/actions/station';
 
 const expect = ServerlessMochaPlugin.chai.expect;
 
-describe('GET /data/{stationId} - Invalid station data submission', () => {
+describe('POST /data/{stationId} - Invalid station data submission', () => {
 
   let response, statusCode;
 
   // Before running the tests, send a request to the endpoint.
   before(function(done){
+
+    this.timeout(10000);
 
     StationAction.submit({})
       .then((body) => {

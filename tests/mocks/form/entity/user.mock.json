@@ -1,0 +1,15 @@
+{
+  "firstName": "Peter",
+  "lastName": "Doe",
+  "partnerFullName": "Mary Doe",
+  "children": [
+    {
+      "fullName": "Jack Doe",
+      "age": "4 years"
+    },
+    {
+      "fullName": "Sal Doe",
+      "age": "6 months"
+    }
+  ]
+}

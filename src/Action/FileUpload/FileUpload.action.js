@@ -37,53 +37,59 @@ export default LambdaWrapper(CONFIGURATION, async (di: DependencyInjection, requ
   //const event = request.getContainer().getEvent();
   const formData = request.getAll();
 
-  const data = new FileParserService().getFileContent(formData);
-  const stationModel = new StationModel(stationMock);
+  console.log('formData: ', formData);
 
-  const ageResolver = new AgeResolver(di);
-  const varietyResolver = new VarietyResolver(di);
-  const plotResolver = new PlotResolver(di);
-  const childResolver = new ChildResolver(di);
-  const userResolver = new UserResolver(di);
+  if (formData) {
 
-  ageResolver.importFromFile(data); // get import data
+    const filesCount = Object.values(formData).length;
 
-  const ages = ageResolver.getRawData(); // hydrate and return entities
+    console.log('filesCount: ', filesCount);
 
-  // PROCESS AGES
-  await di.get(DEFINITIONS.DATABASE).processBatches(ages, TABLES.AGE_TABLE); // store to db
+    const data = new FileParserService().getFileContent(formData);
 
-  // PROCESS VARIETIES
-  varietyResolver.importFromFile(data); // get import data
-  const varieties = await varietyResolver.getRawData(); // hydrate and return entities
-  await di.get(DEFINITIONS.DATABASE).processBatches(varieties, TABLES.VARIETY_TABLE); // store to db
+    const ageResolver = new AgeResolver(di);
+    const varietyResolver = new VarietyResolver(di);
+    const plotResolver = new PlotResolver(di);
+    const childResolver = new ChildResolver(di);
+    const userResolver = new UserResolver(di);
 
+    ageResolver.importFromFile(data); // get import data
 
-  // PROCESS PLOTS
-  plotResolver.importFromFile(data); // get import data
-  const plots = await plotResolver.getRawData(); // hydrate and return entities
-  await di.get(DEFINITIONS.DATABASE).processBatches(plots, TABLES.PLOT_TABLE); // store to db
+    const ages = ageResolver.getRawData(); // hydrate and return entities
 
-  const plotResults = await plotResolver.getAll();
+    // PROCESS AGES
+    await di.get(DEFINITIONS.DATABASE).processBatches(ages, TABLES.AGE_TABLE); // store to db
 
-  // PROCESS CHILDREN
-  childResolver.importFromFile(data); // get import data
-  const children = await childResolver.getChildren(); // hydrate and return entities
-  await di.get(DEFINITIONS.DATABASE).processBatches(children, TABLES.CHILD_TABLE); // store to db
-
-  const childrenResults = await childResolver.getAll();
-  // console.log(children);
-
-  // PROCESS USERS
-  userResolver.importFromFile(data); // get import data
-  const users = await userResolver.getRawData(); // hydrate and return entities
-  console.log(users);
-  await di.get(DEFINITIONS.DATABASE).processBatches(users, TABLES.USER_TABLE); // store to db
+    // PROCESS VARIETIES
+    varietyResolver.importFromFile(data); // get import data
+    const varieties = await varietyResolver.getRawData(); // hydrate and return entities
+    await di.get(DEFINITIONS.DATABASE).processBatches(varieties, TABLES.VARIETY_TABLE); // store to db
 
 
-  const userResults = await userResolver.getAll();
+    // PROCESS PLOTS
+    plotResolver.importFromFile(data); // get import data
+    const plots = await plotResolver.getRawData(); // hydrate and return entities
+    await di.get(DEFINITIONS.DATABASE).processBatches(plots, TABLES.PLOT_TABLE); // store to db
 
-  response = new ResponseModel({ userResults }, 200, `Retrieved ${userResults.length} results from db`);
+    // PROCESS CHILDREN
+    childResolver.importFromFile(data); // get import data
+    const children = await childResolver.getChildren(); // hydrate and return entities
+    await di.get(DEFINITIONS.DATABASE).processBatches(children, TABLES.CHILD_TABLE); // store to db
+
+    const childrenResults = await childResolver.getAll();
+
+    // PROCESS USERS
+    userResolver.importFromFile(data); // get import data
+    const users = await userResolver.getRawData(); // hydrate and return entities
+    await di.get(DEFINITIONS.DATABASE).processBatches(users, TABLES.USER_TABLE); // store to db
+
+    const userResults = await userResolver.getAll();
+
+    const message = filesCount > 1 ? `${filesCount} files` : `1 file`;
+    response = new ResponseModel({}, 200, `Successfully processed ${message}`);
+  } else {
+    response = new ResponseModel({}, 500, 'No files found!');
+  }
 
 
   done(null, response.generate());

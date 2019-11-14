@@ -27,14 +27,15 @@ import { getCount } from '../../lib/Util';
  *    {
  *      "data": [
  *        {
+ *          id: 'Gh69j-902DFb-19028-827wD',
  *          name: 'Catuai',
  *          age: null,
  *          percentage: 3000
  *        },
  *        {
+ *          id: 'm21Tg9h-Gw5625-j9s552-BN9Gb',
  *          name: 'Borbon',
- *          plotName: 'El Naranjo',
- *          age: { months: null, years: 10 },
+ *          age: '10 years',
  *          percentage: null
  *        }
  *      ],

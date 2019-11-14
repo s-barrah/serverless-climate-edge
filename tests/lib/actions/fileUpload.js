@@ -12,18 +12,12 @@ const filePath = {
 
 export default class FileUploadAction {
 
-  static upload() {
+  static upload(data) {
     return new Promise((resolve, reject) => {
       request({
         method: 'POST',
         uri: BASE_URL + 'upload',
-        formData: {
-          attachments: [
-            fs.createReadStream(filePath.plot),
-            fs.createReadStream(filePath.farmer),
-            fs.createReadStream(filePath.children),
-          ],
-        },
+        formData: data,
         json: true,
       })
         .then((body) => {

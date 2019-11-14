@@ -1,11 +1,10 @@
 
 import PlotModel from '../Model/Plot.model';
-import VarietyModel from '../Model/Variety.model';
 
 import VarietyResolver from '../Resolver/Variety.resolver';
 
 
-import { removeDuplicates, removeDuplicateByProp } from '../lib/Util';
+import { removeDuplicates } from '../lib/Util';
 import { TABLES } from "../Config/Configuration";
 import DatabaseService from "../Service/Database.service";
 
@@ -29,25 +28,20 @@ export default class PlotResolver {
     return removeDuplicates(cleanedResults);
   }
 
+
+  /**
+   * Function to get all plots
+   * data from raw data
+   * @return {Promise<*>}
+   */
   async getRawData() {
     const varietyResolver = new VarietyResolver(this.di);
     const varieties = await varietyResolver.getAll();
 
-    console.log('Plot resolver varieties.length: ', varieties.length);
-
     return this.getPlots().map((plot) => {
       const getVarieties = varieties.filter((variety) => variety.plotName === plot.title);
-      // console.log('Plot resolver getVarieties: ', getVarieties);
-      console.log('Plot resolver getVarieties.length: ', getVarieties.length);
+
       const filteredVarietyList = this.getFilteredVarieties(getVarieties);
-      // console.log('Plot resolver formattedList: ', formattedList);
-      const filteredVarieties = getVarieties.filter((variety) => {
-        return {
-          name: variety.name,
-          age: variety.age ? variety.age : null,
-          percentage: variety.percentage ? variety.percentage : null,
-        }
-      });
       const entity = {
         title: plot.title,
         size: plot.size,
@@ -66,19 +60,25 @@ export default class PlotResolver {
         percentage: variety.percentage ? variety.percentage : null,
       }
     });
-    // return data.map((variety) => new VarietyModel().hydrateFromEntity(variety).getEntityMappings());
   }
-  /*
-  getEnrichedVarieties(data) {
-    return data.map((variety) => new VarietyModel().hydrateFromEntity(variety).getEntityMappings());
-  }
-*/
+
+
+  /**
+   * Function to get all data
+   * from the database
+   * @return {Promise<*|void>}
+   */
   async getAll() {
     const databaseService = new DatabaseService(this.di);
 
     return await databaseService.getEntries(this.table);
   }
 
+
+  /**
+   * Import data from file
+   * @param data
+   */
   importFromFile(data) {
     this.data = data;
   }

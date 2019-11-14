@@ -11,7 +11,10 @@ describe('GET /varieties - get all varieties data from db', () => {
 
   // Before running the tests, send a request to the endpoint.
   before(function(done){
-    EntityAction.getVarieties()
+
+    this.timeout(10000);
+
+    EntityAction.get('varieties')
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -30,7 +33,7 @@ describe('GET /varieties - get all varieties data from db', () => {
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('0 record found');
+    expect(response.message.includes('found')).to.eql(true);
     done();
   });
 

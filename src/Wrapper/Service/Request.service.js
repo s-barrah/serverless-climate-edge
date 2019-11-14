@@ -219,17 +219,12 @@ export default class RequestService extends DependencyAwareClass {
 
     const body = event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('binary').trim() : event.body;
 
-    console.log('body: ', body);
-    console.log('boundary: ', boundary);
-    console.log('body.split(boundary): ', body.split(`${boundary}--`));
-
     const result = {};
     body
       .split(`${boundary}`)
       .forEach((item) => {
 
         if (item !== null) {
-          console.log('item: ', item);
           if (/filename=".+"/g.test(item)) {
             result[item.match(/name=".+";/g)[0].slice(6, -2)] = {
               type: 'file',
@@ -258,7 +253,8 @@ export default class RequestService extends DependencyAwareClass {
     const event = this.getContainer().getEvent();
 
     const boundary = prefixBoundary + this.getBoundary(event);
-    if (!boundary) { return defaultResult;}
+
+    if (!boundary || event.body === null) { return null;}
     return (event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('binary') : event.body)
       .split(boundary)
       .filter((item) => item.indexOf('Content-Disposition: form-data') !== -1)
@@ -277,9 +273,6 @@ export default class RequestService extends DependencyAwareClass {
         if (header.indexOf('filename') !== -1) {
           const filename = header.match(/filename="([^"]+)"/)[0];
           const contentType = header.match(/Content-Type: (.+)/)[0];
-
-          console.log('filename: ', filename);
-          console.log('contentType: ', contentType);
 
           if (!(contentType.indexOf('text') !== -1)) { // replace content with binary
             content = Buffer.from(content, 'binary');

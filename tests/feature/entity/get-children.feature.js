@@ -5,13 +5,16 @@ import EntityAction from '../../lib/actions/entity';
 const expect = ServerlessMochaPlugin.chai.expect;
 
 
-describe('GET /users - get all users data from db', () => {
+describe('GET /children - get all children data from db', () => {
 
   let response, statusCode;
 
   // Before running the tests, send a request to the endpoint.
   before(function(done){
-    EntityAction.getUsers()
+
+    this.timeout(10000);
+
+    EntityAction.get('children')
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -31,7 +34,10 @@ describe('GET /users - get all users data from db', () => {
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('0 record found');
+    expect(response.message.includes('found')).to.eql(true);
     done();
   });
+
 });
+
+

@@ -21,25 +21,6 @@ AWS.config.update(config);
 const dynamoDb = new AWS.DynamoDB();
 
 const documentClient = new AWS.DynamoDB.DocumentClient();
-/*
-
-const TABLES = {
-  AGE: 'serverless-climate-edge-age-dev',
-  VARIETY: 'serverless-climate-edge-variety-dev',
-  PLOT: 'serverless-climate-edge-plots-dev',
-  CHILD: 'serverless-climate-edge-child-dev',
-  USER: 'serverless-climate-edge-users-dev'
-};
-*/
-
-
-/*{
-  region: 'localhost',
-    endpoint: 'http://localhost:8000',
-  accessKeyId: 'DEFAULT_ACCESS_KEY',  // needed if you don't have aws credentials at all in env
-  secretAccessKey: 'DEFAULT_SECRET'
-}*/
-// const tableName = process.env.STATION_TABLE;
 
 /**
  * DatabaseService class
@@ -54,9 +35,6 @@ export default class DatabaseService extends DependencyAwareClass {
   }
 
   async create(params: Object) {
-
-    console.log('stationId', params.Item.stationId);
-    console.log('Id', params.Item.id);
 
     this.Timer.start(`dynamoDb-create-${params.TableName}-item`);
     await documentClient.put(params).promise();
@@ -93,8 +71,6 @@ export default class DatabaseService extends DependencyAwareClass {
 
 
   async getEntry(key: number, tableName: string) {
-
-    console.log('key: ', key);
 
     const params = {
       TableName: tableName,
@@ -204,8 +180,8 @@ export default class DatabaseService extends DependencyAwareClass {
       await documentClient.batchWrite(params).promise();
       this.Timer.stop(`dynamoDb-batch-write-${tableName}-items`);
     } catch (error) {
-      console.log('tableName: ', tableName);
-      console.log('data: ', data);
+      console.log('batchWrite Error tableName: ', tableName);
+      console.log('batchWrite Error data: ', data);
       console.error(`batch-write-items-error: ${error}`);
     }
   }
@@ -277,11 +253,8 @@ export default class DatabaseService extends DependencyAwareClass {
         return {
           TableName: table,
           KeyConditionExpression : 'id = :idVal',
-          FilterExpression : 'months = :monthsVal and years = :yearsVal',
           ExpressionAttributeValues : {
             ':idVal' : item.id,
-            ':monthsVal' : item.months,
-            ':yearsVal' : item.years,
           }
         };
       case TABLES.VARIETY_TABLE:
@@ -340,12 +313,13 @@ export default class DatabaseService extends DependencyAwareClass {
       case TABLES.SENSOR_TABLE:
         return {
           TableName: table,
-          KeyConditionExpression : 'stationId = :stationIdVal',
-          FilterExpression : 'airTemperature = :airTemperatureVal and soilTemperature = :soilTemperatureVal',
+          KeyConditionExpression : 'stationId = :stationIdVal and #timestamp = :timestampVal',
+          ExpressionAttributeNames : {
+            '#timestamp' : 'timestamp'
+          },
           ExpressionAttributeValues : {
             ':stationIdVal' : item.stationId,
-            ':airTemperatureVal' : item.airTemperature,
-            ':soilTemperatureVal' : item.soilTemperature,
+            ':timestampVal' : item.timestamp,
           }
         };
       default:

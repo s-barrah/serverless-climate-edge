@@ -1,0 +1,15 @@
+{
+  "stationId": 996937517,
+  "timestamp": "2018-12-01T15:01:06Z",
+  "airTemperature": 24.82,
+  "soilTemperature": 21.44,
+  "airPressure": 825,
+  "soilMoisture": 1741,
+  "leafWetness": 1630,
+  "PAR": 1775,
+  "humidity": 59.01,
+  "batteryVoltage": 7890,
+  "batteryTemperature": 24.58,
+  "solarVoltage": 21229,
+  "chargeCurrent": 5
+}

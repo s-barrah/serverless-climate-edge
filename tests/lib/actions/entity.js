@@ -4,11 +4,11 @@ const BASE_URL = process.env.STAGING_BASE_URL;
 
 export default class EntityAction {
 
-  static getAges() {
+  static get(param) {
     return new Promise((resolve, reject) => {
       request({
         method: 'GET',
-        uri: BASE_URL + 'ages',
+        uri: BASE_URL + param,
         json: true,
       })
         .then((body) => {

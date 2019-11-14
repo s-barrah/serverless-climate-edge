@@ -25,7 +25,7 @@ export default class VarietyModel extends Model {
    * @param value
    */
   setId(value: string) {
-    this.id = value && value.trim() !== '' ? value : null;
+    this.id = value && value !== '' ? value : null;
   }
 
   /**
@@ -33,7 +33,7 @@ export default class VarietyModel extends Model {
    * @return {null|*}
    */
   getId() {
-    return this.id;
+    return this.id !== null ? this.id : this.generateId();
   }
 
   /**
@@ -50,7 +50,7 @@ export default class VarietyModel extends Model {
    * @param value
    */
   setName(value: string) {
-    this.name = value && value.trim() !== '' ? value : null;
+    this.name = value !== '' ? value : null;
   }
 
   /**
@@ -66,7 +66,7 @@ export default class VarietyModel extends Model {
    * @param value
    */
   setAge(value: string) {
-    this.age = value ? value : null;
+    this.age = value ? value : 'NULL';
   }
 
   /**
@@ -100,7 +100,7 @@ export default class VarietyModel extends Model {
    */
   getEntityMappings() {
     return {
-      id: this.generateId(),
+      id: this.getId(),
       name: this.getName(),
       age: this.getAge(),
       percentage: this.getPercentage(),
@@ -113,6 +113,7 @@ export default class VarietyModel extends Model {
    * @return {VarietyModel}
    */
   hydrateFromEntity(entityDataValues) {
+    this.instantiateFunctionWithDefinedValue('setId', entityDataValues.id);
     this.instantiateFunctionWithDefinedValue('setName', entityDataValues.name);
     this.instantiateFunctionWithDefinedValue('setAge', entityDataValues.age);
     this.instantiateFunctionWithDefinedValue('setPercentage', entityDataValues.percentage);

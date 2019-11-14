@@ -33,7 +33,7 @@ export default class SensorModel extends Model {
   }
 
 
-  dividedByThousand(value: string) {
+  dividedByThousand(value: number) {
     return value && value !== '' ? value / this.thousandth : null;
   }
 
@@ -58,7 +58,7 @@ export default class SensorModel extends Model {
    * Set Station Id
    * @param value
    */
-  setStationId(value: string) {
+  setStationId(value: number) {
     this._stationId = value !== '' ? value : null;
   }
 
@@ -90,7 +90,7 @@ export default class SensorModel extends Model {
    * Set Air Temperature
    * @param value
    */
-  setAirTemperature(value: string) {
+  setAirTemperature(value: number) {
     this._air_temperature = value && value !== '' ? value : null;
   }
 
@@ -106,7 +106,7 @@ export default class SensorModel extends Model {
    * Set Soil Temperature
    * @param value
    */
-  setSoilTemperature(value: string) {
+  setSoilTemperature(value: number) {
     this._soil_temperature = value && value !== '' ? value : null;
   }
 
@@ -122,7 +122,7 @@ export default class SensorModel extends Model {
    * Set Air Pressure
    * @param value
    */
-  setAirPressure(value: string) {
+  setAirPressure(value: number) {
     this._air_pressure = value && value !== '' ? value : null;
   }
 
@@ -135,17 +135,22 @@ export default class SensorModel extends Model {
   }
 
   /**
+   * Calculate Soil Moisture
+   * @param value
+   */
+  calculateSoilMoisture(value: number) {
+    this.value = value;
+    const mV = (this.value / 4096) * 3300;
+    return (0.000494 * mV - 0.554) * 100;
+    // 0.000433 instead 0.000494 for non soil
+  }
+
+  /**
    * Set Soil Moisture
    * @param value
    */
-  setSoilMoisture(value: string) {
-    if (value && value !== '') {
-      const mV = (value / 4096) * 3300;
-      this._soil_moisture = (0.000494 * mV - 0.554) * 100;
-      // 0.000433 instead 0.000494 for non soil
-    } else {
-      this._soil_moisture = null;
-    }
+  setSoilMoisture(value: number) {
+    this._soil_moisture = value && value !== '' ? this.calculateSoilMoisture(value) : null;
   }
 
   /**
@@ -156,27 +161,30 @@ export default class SensorModel extends Model {
     return this._soil_moisture;
   }
 
+  /**
+   * Calculate Leaf Wetness
+   * @param value
+   */
+  calculateLeafWetness(value: number) {
+    this.value = value;
+    const min = 600; // dry
+    const max = 1650; // saturated
+    const range = (max - min) / 100;
+    if (value <= min) {
+      return 0;
+    } else if (this.value >= max) {
+      return 100;
+    } else {
+      return (this.value - min) / range;
+    }
+  }
 
   /**
    * Set Leaf Wetness
    * @param value
    */
-  setLeafWetness(value: string) {
-    if (value && value !== '') {
-      const min = 600; // dry
-      const max = 1650; // saturated
-      const range = (max - min) / 100;
-      if (value <= min) {
-        this._leaf_wetness = 0;
-      } else if (value >= max) {
-        this._leaf_wetness = 100;
-      } else {
-        this._leaf_wetness = (value - min) / range;
-      }
-    } else {
-      this._leaf_wetness = null;
-    }
-
+  setLeafWetness(value: number) {
+    this._leaf_wetness = value && value !== '' ? this.calculateLeafWetness(value) : null;
   }
 
   /**
@@ -188,15 +196,20 @@ export default class SensorModel extends Model {
   }
 
   /**
+   * Calculate Par
+   * @param value
+   */
+  calculatePar(value: number) {
+    this.value = value;
+    return (this.value / 11.234) * 5;
+  }
+
+  /**
    * Set Par
    * @param value
    */
-  setPar(value: string) {
-    if (value && value !== '') {
-      this._par = (value / 11.234) * 5;
-    } else {
-      this._par = null;
-    }
+  setPar(value: number) {
+    this._par = value && value !== '' ? this.calculatePar(value) : null;
   }
 
   /**
@@ -211,7 +224,7 @@ export default class SensorModel extends Model {
    * Set Humidity
    * @param value
    */
-  setHumidity(value: string) {
+  setHumidity(value: number) {
     this._humidity = value && value !== '' ? value : null;
   }
 
@@ -227,8 +240,8 @@ export default class SensorModel extends Model {
    * Set Battery Voltage
    * @param value
    */
-  setBatteryVoltage(value: string) {
-    this._battery_voltage = this.dividedByThousand(value);
+  setBatteryVoltage(value: number) {
+    this._battery_voltage = value && value !== '' ? this.dividedByThousand(value) : null;
   }
 
   /**
@@ -243,8 +256,8 @@ export default class SensorModel extends Model {
    * Set Rainfall Sensor Battery Voltage
    * @param value
    */
-  setRainfallSensorBatteryVoltage(value: string) {
-    this._rainfall_sensor_battery_voltage = this.dividedByThousand(value);
+  setRainfallSensorBatteryVoltage(value: number) {
+    this._rainfall_sensor_battery_voltage = value && value !== '' ? this.dividedByThousand(value) : null;
   }
 
   /**
@@ -255,19 +268,20 @@ export default class SensorModel extends Model {
     return this._rainfall_sensor_battery_voltage;
   }
 
+  calculateRainfallDripCount(value: number) {
+    this.value = value;
+    const dropToMIConversion = 1.75;
+    const gaugeArea = 5500;
+    const observeMI = this.value * dropToMIConversion;
+    return (observeMI / gaugeArea) * 1000;
+  }
+
   /**
    * Set Rainfall Drip Count
    * @param value
    */
-  setRainfallDripCount(value: string) {
-    if (value && value !== '') {
-      const dropToMIConversion = 1.75;
-      const gaugeArea = 5500;
-      const observeMI = value * dropToMIConversion;
-      this._rainfall_drip_count = (observeMI / gaugeArea) * 1000;
-    } else {
-      this._rainfall_drip_count = null;
-    }
+  setRainfallDripCount(value: number) {
+    this._rainfall_drip_count = value && value !== '' ? this.calculateRainfallDripCount(value) : null;
   }
 
   /**
@@ -282,7 +296,7 @@ export default class SensorModel extends Model {
    * Set Battery Temperature
    * @param value
    */
-  setBatteryTemperature(value: string) {
+  setBatteryTemperature(value: number) {
     this._battery_temperature = value && value !== '' ? value : null;
   }
 
@@ -298,7 +312,7 @@ export default class SensorModel extends Model {
    * Set Solar Voltage
    * @param value
    */
-  setSolarVoltage(value: string) {
+  setSolarVoltage(value: number) {
     this._solar_voltage = this.dividedByThousand(value);
   }
 
@@ -314,7 +328,7 @@ export default class SensorModel extends Model {
    * Set Charge Current
    * @param value
    */
-  setChargeCurrent(value: string) {
+  setChargeCurrent(value: number) {
     this._charge_current = value && value !== '' ? value : null;
   }
 
@@ -342,7 +356,6 @@ export default class SensorModel extends Model {
    */
   getEntityMappings() {
     return {
-      id: this.generateId(),
       stationId: this.getStationId(),
       timestamp: this.getTimestamp(),
       airTemperature: this.getAirTemperature(),

@@ -1,18 +1,19 @@
 import ServerlessMochaPlugin from 'serverless-mocha-plugin';
 
-import StationAction from '../../lib/actions/station';
+import EntityAction from '../../lib/actions/entity';
 
 const expect = ServerlessMochaPlugin.chai.expect;
 
-
-describe('GET /chart/{stationId} - Empty Get chart submission', () => {
+describe('GET /plots - get all plots data from db', () => {
 
   let response, statusCode;
 
   // Before running the tests, send a request to the endpoint.
   before(function(done){
 
-    StationAction.getChart()
+    this.timeout(10000);
+
+    EntityAction.get('plots')
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -23,17 +24,18 @@ describe('GET /chart/{stationId} - Empty Get chart submission', () => {
         response = error.response.body;
         done();
       });
-
   });
 
-  it('should expect a 500 status code', (done) => {
-    expect(statusCode).to.eql(500);
+
+  it('should expect a 200 status code', (done) => {
+    expect(statusCode).to.eql(200);
     done();
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('No station id provided');
+    expect(response.message.includes('found')).to.eql(true);
     done();
   });
 
 });
+

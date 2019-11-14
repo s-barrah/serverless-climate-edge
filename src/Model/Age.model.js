@@ -22,7 +22,7 @@ export default class AgeModel extends Model {
    * @param value
    */
   setId(value: string) {
-    this.id = value && value.trim() !== '' ? value : null;
+    this.id = value !== '' ? value : null;
   }
 
   /**
@@ -30,7 +30,7 @@ export default class AgeModel extends Model {
    * @return {null|*}
    */
   getId() {
-    return this.id;
+    return this.id !== null ? this.id : this.generateId();
   }
 
   /**
@@ -80,7 +80,7 @@ export default class AgeModel extends Model {
    */
   getEntityMappings() {
     return {
-      id: this.generateId(),
+      id: this.getId(),
       months: this.getMonths(),
       years: this.getYears(),
     };
@@ -92,7 +92,7 @@ export default class AgeModel extends Model {
    * @return {AgeModel}
    */
   hydrateFromEntity(entityDataValues) {
-
+    this.instantiateFunctionWithDefinedValue('setId', entityDataValues.id);
     this.instantiateFunctionWithDefinedValue('setMonths', entityDataValues.months);
     this.instantiateFunctionWithDefinedValue('setYears', entityDataValues.years);
     return this;

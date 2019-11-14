@@ -24,7 +24,7 @@ export default class PlotModel extends Model {
    * @param value
    */
   setId(value: string) {
-    this.id = value && value.trim() !== '' ? value : null;
+    this.id = value && value !== '' ? value : null;
   }
 
   /**

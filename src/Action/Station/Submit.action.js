@@ -29,15 +29,11 @@ export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: R
   // Store model
   const stationModel = new StationModel(request.getAll());
 
-  console.log('stationModel.getSensorData: ', stationModel.getSensorData());
-
-
   const data = stationModel.getEntityMappings();
   data.timestamp = Math.floor(Date.now() / 1000);
 
   request.validateAgainstConstraints(requestConstraints)
     .then( async () => {
-      console.log('data: ', data);
       await di.get(DEFINITIONS.DATABASE).processBatches(stationModel.getSensorData(), TABLES.SENSOR_TABLE);
       await di.get(DEFINITIONS.DATABASE).createEntry(data, TABLES.STATION_TABLE);
     })
@@ -45,7 +41,6 @@ export default LambdaWrapper(CONFIGURATION, (di: DependencyInjection, request: R
       response = new ResponseModel(data, 200, 'Station data has been processed');
     })
     .catch((error) => {
-      console.error(error);
       response = (error instanceof ResponseModel) ? error : new ResponseModel({}, 500, 'Unknown error.');
     })
     .then(() => {

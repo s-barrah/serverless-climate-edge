@@ -1,6 +1,4 @@
 
-import UserModel from '../Model/User.model';
-
 import ChildResolver from '../Resolver/Child.resolver';
 
 import { removeDuplicates } from '../lib/Util';
@@ -11,10 +9,14 @@ export default class UserResolver {
 
   constructor(di) {
     this.di = di;
-
     this.table = TABLES.USER_TABLE;
   }
 
+  /**
+   * Get users first and last name
+   * object from raw data
+   * @return {*}
+   */
   getUsers() {
     return this.data.map((item) => {
       const nameList = item['Farmer Name'].split(' ');
@@ -25,12 +27,23 @@ export default class UserResolver {
     });
   }
 
+  /**
+   * Get all partners from
+   * raw data
+   * @return {*}
+   */
   getAllPartners() {
     return this.data.filter((item) => {
       return item['Partner Name'] !== undefined;
     });
   }
 
+  /**
+   * Get users children
+   * @param children
+   * @param name
+   * @return {*}
+   */
   getUsersChildren(children, name) {
     if (children) {
       const getUsersChildren = children.filter((obj) => {
@@ -48,6 +61,12 @@ export default class UserResolver {
     return null;
   }
 
+  /**
+   * Get users partner
+   * @param data
+   * @param name
+   * @return {null}
+   */
   getUsersPartner(data, name) {
     if (data) {
       const usersPartner = data.filter((obj) => {
@@ -59,6 +78,11 @@ export default class UserResolver {
     return null;
   }
 
+  /**
+   * Get users full name
+   * @param user
+   * @return {string}
+   */
   getFullName(user) {
     if (user) {
       this.user = user;
@@ -66,6 +90,11 @@ export default class UserResolver {
     }
   }
 
+  /**
+   * Function to get all users
+   * data from raw data
+   * @return {Promise<*>}
+   */
   async getRawData() {
 
     const childResolvers = new ChildResolver(this.di);
@@ -93,12 +122,20 @@ export default class UserResolver {
     return formattedUsers.filter((user) => user.firstName !== undefined || user.lastName !== undefined);
   }
 
-
+  /**
+   * Function to get all data
+   * from the database
+   * @return {Promise<*|void>}
+   */
   async getAll() {
-    const databaseService = new DatabaseService(this.di);
-    return await databaseService.getEntries(this.table);
+    return await new DatabaseService(this.di).getEntries(this.table);
   }
 
+
+  /**
+   * Import data from file
+   * @param data
+   */
   importFromFile(data) {
     this.data = data;
   }

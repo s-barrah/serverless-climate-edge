@@ -1,17 +1,20 @@
 import ServerlessMochaPlugin from 'serverless-mocha-plugin';
 
-import EntityAction from '../../lib/actions/entity';
+import StationAction from '../../lib/actions/station';
 
 const expect = ServerlessMochaPlugin.chai.expect;
 
 
-describe('GET /children - get all children data from db', () => {
+describe('GET /chart/{stationId} - Invalid Get Chart Data', () => {
 
   let response, statusCode;
 
   // Before running the tests, send a request to the endpoint.
   before(function(done){
-    EntityAction.getChildren()
+
+    this.timeout(10000);
+
+    StationAction.getChart(839384)
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -22,19 +25,17 @@ describe('GET /children - get all children data from db', () => {
         response = error.response.body;
         done();
       });
+
   });
 
-
-  it('should expect a 200 status code', (done) => {
-    expect(statusCode).to.eql(200);
+  it('should expect a 500 status code', (done) => {
+    expect(statusCode).to.eql(500);
     done();
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('0 record found');
+    expect(response.message).to.eql('No sensor data found for Station - 839384');
     done();
   });
 
 });
-
-

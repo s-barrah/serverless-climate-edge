@@ -1,11 +1,10 @@
 import ServerlessMochaPlugin from 'serverless-mocha-plugin';
 
-import StationAction from '../../lib/actions/station';
+import EntityAction from '../../lib/actions/entity';
 
 const expect = ServerlessMochaPlugin.chai.expect;
 
-
-describe('GET /data - Invalid Get Chart Data', () => {
+describe('GET /ages - get all ages data from db', () => {
 
   let response, statusCode;
 
@@ -14,7 +13,7 @@ describe('GET /data - Invalid Get Chart Data', () => {
 
     this.timeout(10000);
 
-    StationAction.get()
+    EntityAction.get('ages')
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -25,17 +24,15 @@ describe('GET /data - Invalid Get Chart Data', () => {
         response = error.response.body;
         done();
       });
-
   });
 
-  it('should expect a 500 status code', (done) => {
-    expect(statusCode).to.eql(500);
+  it('should expect a 200 status code', (done) => {
+    expect(statusCode).to.eql(200);
     done();
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('No station id provided');
+    expect(response.message.includes('found')).to.eql(true);
     done();
   });
-
 });

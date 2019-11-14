@@ -6,7 +6,7 @@ const expect = ServerlessMochaPlugin.chai.expect;
 
 const stationMock = require('../../mocks/form/station/valid.mock.json');
 
-describe('POST /data/{stationId} - Valid station data submission', () => {
+describe('GET /data/{stationId} - Submit and Get Station Data', () => {
 
   let response, statusCode;
 
@@ -16,6 +16,7 @@ describe('POST /data/{stationId} - Valid station data submission', () => {
     this.timeout(10000);
 
     StationAction.submit(stationMock)
+      .then((results) => StationAction.get(results.data.stationId))
       .then((body) => {
         statusCode = 200;
         response = body;
@@ -35,7 +36,21 @@ describe('POST /data/{stationId} - Valid station data submission', () => {
   });
 
   it('should expect a success status', (done) => {
-    expect(response.message).to.eql('Station data has been processed');
+    expect(response.message).to.eql('Success');
+    done();
+  });
+
+  it('should return the processed response', (done) => {
+    expect(response.data).to.have.property('altitude');
+    expect(response.data).to.have.property('networkOperator');
+    expect(response.data).to.have.property('signalStrength');
+    expect(response.data).to.have.property('latitude');
+    expect(response.data).to.have.property('hardwareVersion');
+    expect(response.data).to.have.property('firmwareVersion');
+    expect(response.data).to.have.property('stationId');
+    expect(response.data).to.have.property('longitude');
+    expect(response.data).to.have.property('timestamp');
+    expect(response.data).to.have.property('sensors');
     done();
   });
 
@@ -64,7 +79,7 @@ describe('POST /data/{stationId} - Valid station data submission', () => {
     done();
   });
 
-  it('should return the Station station Id value', (done) => {
+  it('should return the Station Id value', (done) => {
     expect(response.data.stationId).to.eql(996937517);
     done();
   });
@@ -73,6 +88,7 @@ describe('POST /data/{stationId} - Valid station data submission', () => {
     expect(response.data.longitude).to.eql(35.20965);
     done();
   });
+
 
 
 });

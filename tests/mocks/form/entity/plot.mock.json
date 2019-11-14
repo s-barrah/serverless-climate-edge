@@ -1,0 +1,16 @@
+{
+  "title": "El Sucunan",
+  "size": "0.5 Manzana",
+  "varieties": [
+    {
+      "name": "Catuai",
+      "age": null,
+      "percentage": 3000
+    },
+    {
+      "name": "Test",
+      "age": "6 months",
+      "percentage": 400
+    }
+  ]
+}
