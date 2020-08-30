@@ -20,7 +20,7 @@ describe('Model/Age.model', () => {
 
     it('should set the month correctly', () => {
       ageModel.setMonths(ageMock.months);
-      expect(ageModel.getMonths()).to.eql('NULL');
+      expect(ageModel.getMonths()).to.eql(null);
     });
 
     it('should set the year correctly', () => {
@@ -37,7 +37,7 @@ describe('Model/Age.model', () => {
     it('should return an object with all of the entity values', () => {
       expect(ageModel.getEntityMappings()).to.eql({
         id: ageMock.id,
-        months: 'NULL',
+        months: null,
         years: ageMock.years
       });
     });
@@ -49,7 +49,7 @@ describe('Model/Age.model', () => {
       const ageModel = new AgeModel().hydrateFromEntity(ageMock);
 
       expect(ageModel.getId()).to.eql(ageMock.id);
-      expect(ageModel.getMonths()).to.eql('NULL');
+      expect(ageModel.getMonths()).to.eql(null);
       expect(ageModel.getYears()).to.eql(ageMock.years);
     });
   });
