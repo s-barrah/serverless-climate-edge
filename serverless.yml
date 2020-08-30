@@ -194,7 +194,7 @@ custom:
     stages:
       - dev
     start:
-      port: 8004
+      port: 8005
       inMemory: true
       heapInitial: 200m
       heapMax: 1g
@@ -205,7 +205,7 @@ custom:
     # noStart: true
 
   serverless-offline:
-    port: 3010
+    httpPort: 3010
     babelOptions:
       presets: ["env"]
 
