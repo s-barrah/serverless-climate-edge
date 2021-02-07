@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.16.0
+version: v1.19.0
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -10,3 +10,31 @@ patch:
         patched: '2020-05-01T05:38:31.399Z'
     - serverless-dynamodb-local > dynamodb-localhost > mocha > yargs-unparser > lodash:
         patched: '2020-07-16T08:48:24.573Z'
+    - snyk > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-docker-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-go-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-gradle-plugin > @snyk/java-call-graph-builder > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-docker-plugin > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-mvn-plugin > @snyk/java-call-graph-builder > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-gradle-plugin > @snyk/cli-interface > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-mvn-plugin > @snyk/cli-interface > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
+    - snyk > snyk-python-plugin > snyk-poetry-lockfile-parser > @snyk/dep-graph > graphlib > lodash:
+        patched: '2021-02-07T14:44:19.210Z'
